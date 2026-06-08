@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Video to GIF Converter | Free Online Tool</title>
+<meta name="description" content="Convert any video to GIF online for free. Set start/end time, frame rate, size and download instantly.">
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+<!-- Google AdSense -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --surface2: #1a1a26;
+    --border: #2a2a3d;
+    --accent: #00f5a0;
+    --accent2: #00d4ff;
+    --accent3: #ff6b6b;
+    --text: #e8e8f0;
+    --text-muted: #7a7a9a;
+    --radius: 14px;
+    --glow: 0 0 30px rgba(0,245,160,0.15);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Animated background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,245,160,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,245,160,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* Glow orbs */
+  body::after {
+    content: '';
+    position: fixed;
+    top: -200px; left: -200px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(0,245,160,0.06) 0%, transparent 70%);
+    z-index: 0;
+    pointer-events: none;
+    animation: drift 12s ease-in-out infinite alternate;
+  }
+
+  @keyframes drift {
+    from { transform: translate(0,0); }
+    to { transform: translate(100px, 80px); }
+  }
+
+  .wrapper { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 0 20px 60px; }
+
+  /* ─── HEADER ─── */
+  header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 24px 0 32px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 36px;
+  }
+
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.5rem; font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.5px;
+  }
+
+  .logo span { color: var(--text-muted); -webkit-text-fill-color: var(--text-muted); font-weight: 400; font-size: 0.85rem; display: block; margin-top: 2px; font-family: 'DM Mono', monospace; }
+
+  .badge {
+    font-family: 'DM Mono', monospace; font-size: 0.7rem;
+    padding: 5px 12px; border-radius: 20px;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* ─── ADS ─── */
+  .ad-banner {
+    background: var(--surface);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 14px;
+    text-align: center;
+    margin-bottom: 28px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ad-banner::before {
+    content: 'AD';
+    position: absolute; top: 6px; left: 10px;
+    font-size: 0.6rem; color: var(--text-muted); font-family: 'DM Mono', monospace;
+    letter-spacing: 1px;
+  }
+
+  .ad-banner ins { display: block; min-height: 90px; }
+
+  /* ─── MAIN GRID ─── */
+  .main-grid {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 24px;
+    align-items: start;
+  }
+
+  @media (max-width: 800px) {
+    .main-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ─── PANELS ─── */
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .panel::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2), transparent);
+  }
+
+  .panel-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 2px;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  .panel-title .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  /* ─── UPLOAD ZONE ─── */
+  .upload-zone {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 50px 30px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    background: var(--bg);
+  }
+
+  .upload-zone:hover, .upload-zone.dragover {
+    border-color: var(--accent);
+    background: rgba(0,245,160,0.03);
+    box-shadow: var(--glow);
+  }
+
+  .upload-icon {
+    width: 64px; height: 64px;
+    margin: 0 auto 16px;
+    background: linear-gradient(135deg, rgba(0,245,160,0.15), rgba(0,212,255,0.15));
+    border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem;
+  }
+
+  .upload-zone h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem; font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .upload-zone p { font-size: 0.85rem; color: var(--text-muted); }
+
+  .upload-zone .formats {
+    margin-top: 14px;
+    display: flex; flex-wrap: wrap; gap: 6px; justify-content: center;
+  }
+
+  .format-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem; padding: 3px 10px;
+    border-radius: 4px; background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+
+  #fileInput { display: none; }
+
+  /* ─── VIDEO PREVIEW ─── */
+  .video-preview-wrap {
+    display: none;
+    position: relative;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: #000;
+    aspect-ratio: 16/9;
+    margin-bottom: 20px;
+  }
+
+  #videoPreview {
+    width: 100%; height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  .video-overlay-info {
+    position: absolute; bottom: 10px; left: 10px;
+    display: flex; gap: 8px;
+  }
+
+  .vbadge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    padding: 3px 8px;
+    background: rgba(0,0,0,0.7);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--accent);
+  }
+
+  /* ─── CONTROLS ─── */
+  .control-group { margin-bottom: 22px; }
+
+  .control-label {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.82rem; font-weight: 500;
+    margin-bottom: 10px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .control-value {
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  /* Time Range Slider */
+  .range-container {
+    position: relative;
+    height: 36px;
+    display: flex; align-items: center;
+  }
+
+  .range-track {
+    width: 100%; height: 6px;
+    background: var(--surface2);
+    border-radius: 3px;
+    position: relative;
+  }
+
+  .range-fill {
+    position: absolute;
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 3px;
+    pointer-events: none;
+  }
+
+  input[type="range"] {
+    position: absolute;
+    width: 100%; height: 6px;
+    -webkit-appearance: none;
+    background: transparent;
+    cursor: pointer;
+    top: 50%; transform: translateY(-50%);
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--bg);
+    box-shadow: 0 0 10px rgba(0,245,160,0.5);
+    cursor: grab;
+    transition: transform 0.15s;
+  }
+
+  input[type="range"]::-webkit-slider-thumb:active { transform: scale(1.2); cursor: grabbing; }
+
+  input[type="range"].range-end::-webkit-slider-thumb {
+    background: var(--accent2);
+    box-shadow: 0 0 10px rgba(0,212,255,0.5);
+  }
+
+  /* Dual slider override */
+  .dual-range { position: relative; height: 36px; }
+  .dual-range input[type="range"] { pointer-events: none; }
+  .dual-range input[type="range"]::-webkit-slider-thumb { pointer-events: auto; }
+
+  /* ─── SELECT / INPUT ─── */
+  select, input[type="number"] {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    padding: 10px 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+    cursor: pointer;
+    appearance: none;
+  }
+
+  select:focus, input[type="number"]:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(0,245,160,0.1);
+  }
+
+  .select-wrap { position: relative; }
+
+  .select-wrap::after {
+    content: '▾';
+    position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+    color: var(--text-muted); pointer-events: none;
+    font-size: 0.8rem;
+  }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+  /* ─── SIZE PRESETS ─── */
+  .preset-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .preset-btn {
+    padding: 8px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+
+  .preset-btn:hover, .preset-btn.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(0,245,160,0.06);
+  }
+
+  /* ─── PROGRESS ─── */
+  .progress-wrap {
+    display: none;
+    margin-top: 16px;
+  }
+
+  .progress-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 8px;
+    font-size: 0.82rem; font-family: 'DM Mono', monospace;
+    color: var(--text-muted);
+  }
+
+  .progress-bar-bg {
+    height: 8px;
+    background: var(--bg);
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 4px;
+    width: 0%;
+    transition: width 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    animation: shimmer 1.5s ease-in-out infinite;
+  }
+
+  @keyframes shimmer {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(100%); }
+  }
+
+  .progress-stage {
+    margin-top: 6px;
+    font-size: 0.75rem; font-family: 'DM Mono', monospace;
+    color: var(--accent);
+    min-height: 16px;
+  }
+
+  /* ─── BUTTONS ─── */
+  .btn-primary {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: none;
+    border-radius: var(--radius);
+    color: #0a0a0f;
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem; font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    margin-top: 16px;
+  }
+
+  .btn-primary::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: rgba(255,255,255,0);
+    transition: background 0.2s;
+  }
+
+  .btn-primary:hover::before { background: rgba(255,255,255,0.1); }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0,245,160,0.35);
+  }
+
+  .btn-primary:active { transform: translateY(0); }
+
+  .btn-primary:disabled {
+    opacity: 0.4; cursor: not-allowed; transform: none;
+    box-shadow: none;
+  }
+
+  .btn-secondary {
+    width: 100%;
+    padding: 13px;
+    background: transparent;
+    border: 1px solid var(--accent);
+    border-radius: var(--radius);
+    color: var(--accent);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem; font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+    display: none;
+  }
+
+  .btn-secondary:hover {
+    background: rgba(0,245,160,0.08);
+    box-shadow: var(--glow);
+  }
+
+  .btn-reset {
+    width: 100%;
+    padding: 10px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 8px;
+    display: none;
+  }
+
+  .btn-reset:hover { border-color: var(--accent3); color: var(--accent3); }
+
+  /* ─── GIF OUTPUT ─── */
+  .gif-output {
+    display: none;
+    margin-top: 20px;
+  }
+
+  .gif-output-inner {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .gif-output img {
+    max-width: 100%;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    display: block; margin: 0 auto 14px;
+  }
+
+  .gif-meta {
+    display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;
+    margin-bottom: 14px;
+  }
+
+  .gif-meta-item {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    padding: 4px 10px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text-muted);
+  }
+
+  .gif-meta-item span { color: var(--accent); }
+
+  /* ─── SIDEBAR ─── */
+  .sidebar { display: flex; flex-direction: column; gap: 20px; }
+
+  /* ─── STATS CARD ─── */
+  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  .stat-box {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 12px;
+    text-align: center;
+  }
+
+  .stat-value {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.3rem; font-weight: 700;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 2px;
+  }
+
+  .stat-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+
+  /* ─── TIPS ─── */
+  .tips-list { list-style: none; }
+
+  .tips-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    display: flex; gap: 10px; align-items: flex-start;
+    line-height: 1.5;
+  }
+
+  .tips-list li:last-child { border-bottom: none; }
+
+  .tip-icon {
+    width: 18px; height: 18px; min-width: 18px;
+    background: linear-gradient(135deg, rgba(0,245,160,0.2), rgba(0,212,255,0.2));
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.65rem;
+    margin-top: 1px;
+  }
+
+  /* ─── AD SIDEBAR ─── */
+  .ad-side {
+    background: var(--surface);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 12px;
+    text-align: center;
+    min-height: 250px;
+    position: relative;
+  }
+
+  .ad-side::before {
+    content: 'ADVERTISEMENT';
+    position: absolute; top: 6px; left: 10px;
+    font-size: 0.55rem; color: var(--text-muted);
+    font-family: 'DM Mono', monospace; letter-spacing: 1px;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    text-align: center;
+    margin-top: 50px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* ─── STATUS MESSAGES ─── */
+  .status-msg {
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-family: 'DM Mono', monospace;
+    margin-top: 12px;
+    display: none;
+  }
+
+  .status-msg.error {
+    background: rgba(255,107,107,0.1);
+    border: 1px solid rgba(255,107,107,0.3);
+    color: var(--accent3);
+    display: block;
+  }
+
+  .status-msg.info {
+    background: rgba(0,245,160,0.06);
+    border: 1px solid rgba(0,245,160,0.2);
+    color: var(--accent);
+    display: block;
+  }
+
+  /* ─── LOADING SPINNER ─── */
+  .spinner {
+    display: inline-block;
+    width: 14px; height: 14px;
+    border: 2px solid rgba(0,0,0,0.3);
+    border-top-color: #0a0a0f;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .panel { padding: 18px; }
+    .two-col { grid-template-columns: 1fr; }
+    .preset-grid { grid-template-columns: repeat(2,1fr); }
+    header { flex-direction: column; gap: 12px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo">
+      GIF<span style="display:inline">forge</span>
+      <span>video → gif conversion engine</span>
+    </div>
+    <div class="badge">⚡ 100% Browser-Based</div>
+  </header>
+
+  <!-- TOP AD BANNER -->
+  <div class="ad-banner">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="1234567890"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <!-- MAIN LAYOUT -->
+  <div class="main-grid">
+
+    <!-- ── LEFT COLUMN ── -->
+    <div class="left-col">
+
+      <!-- UPLOAD PANEL -->
+      <div class="panel" style="margin-bottom:24px;">
+        <div class="panel-title"><span class="dot"></span>Import Video</div>
+
+        <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+          <div class="upload-icon">🎬</div>
+          <h3>Drop your video here</h3>
+          <p>or click to browse files</p>
+          <div class="formats">
+            <span class="format-tag">MP4</span>
+            <span class="format-tag">WebM</span>
+            <span class="format-tag">OGG</span>
+            <span class="format-tag">MOV</span>
+            <span class="format-tag">AVI</span>
+            <span class="format-tag">MKV</span>
+          </div>
+          <input type="file" id="fileInput" accept="video/*">
+        </div>
+
+        <div class="video-preview-wrap" id="videoWrap">
+          <video id="videoPreview" controls preload="metadata"></video>
+          <div class="video-overlay-info">
+            <span class="vbadge" id="durBadge">0:00</span>
+            <span class="vbadge" id="resBadge">—</span>
+          </div>
+        </div>
+
+        <div class="status-msg" id="statusMsg"></div>
+      </div>
+
+      <!-- SETTINGS PANEL -->
+      <div class="panel" style="margin-bottom:24px;">
+        <div class="panel-title"><span class="dot"></span>Conversion Settings</div>
+
+        <!-- TIME RANGE -->
+        <div class="control-group">
+          <div class="control-label">
+            <span>Start Time</span>
+            <span class="control-value" id="startTimeLabel">0.0s</span>
+          </div>
+          <div class="range-container">
+            <div class="range-track">
+              <div class="range-fill" id="rangeFill"></div>
+            </div>
+            <input type="range" id="startSlider" class="range-start" min="0" max="100" value="0" step="0.1">
+          </div>
+
+          <div class="control-label" style="margin-top:18px;">
+            <span>End Time</span>
+            <span class="control-value" id="endTimeLabel">10.0s</span>
+          </div>
+          <div class="range-container">
+            <div class="range-track">
+              <div class="range-fill" id="rangeFill2"></div>
+            </div>
+            <input type="range" id="endSlider" class="range-end" min="0" max="100" value="100" step="0.1">
+          </div>
+
+          <div class="control-label" style="margin-top:10px;">
+            <span>Duration</span>
+            <span class="control-value" id="durationLabel">10.0s</span>
+          </div>
+        </div>
+
+        <!-- FRAME RATE -->
+        <div class="control-group">
+          <div class="control-label">
+            <span>Frame Rate</span>
+            <span class="control-value" id="fpsLabel">10 FPS</span>
+          </div>
+          <div class="range-container">
+            <div class="range-track">
+              <div class="range-fill" id="fpsFill" style="width:33%"></div>
+            </div>
+            <input type="range" id="fpsSlider" min="5" max="30" value="10" step="1">
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-top:4px;">
+            <span style="font-size:0.7rem;color:var(--text-muted);font-family:'DM Mono',monospace;">5 (Smaller)</span>
+            <span style="font-size:0.7rem;color:var(--text-muted);font-family:'DM Mono',monospace;">30 (Smoother)</span>
+          </div>
+        </div>
+
+        <!-- OUTPUT SIZE -->
+        <div class="control-group">
+          <div class="control-label"><span>Output Size</span></div>
+          <div class="preset-grid" id="sizePresets">
+            <button class="preset-btn" data-w="320" data-h="240">320×240<br><span style="color:var(--text-muted);font-size:0.65rem;">Small</span></button>
+            <button class="preset-btn active" data-w="480" data-h="360">480×360<br><span style="color:var(--text-muted);font-size:0.65rem;">Medium</span></button>
+            <button class="preset-btn" data-w="640" data-h="480">640×480<br><span style="color:var(--text-muted);font-size:0.65rem;">Large</span></button>
+            <button class="preset-btn" data-w="800" data-h="600">800×600<br><span style="color:var(--text-muted);font-size:0.65rem;">XL</span></button>
+            <button class="preset-btn" data-w="0" data-h="0">Original<br><span style="color:var(--text-muted);font-size:0.65rem;">Keep</span></button>
+            <button class="preset-btn" data-w="-1" data-h="-1">Custom<br><span style="color:var(--text-muted);font-size:0.65rem;">Set below</span></button>
+          </div>
+          <div class="two-col" id="customSizeWrap" style="margin-top:12px;display:none;">
+            <div>
+              <label style="font-size:0.75rem;color:var(--text-muted);font-family:'DM Mono',monospace;display:block;margin-bottom:5px;">WIDTH (px)</label>
+              <input type="number" id="customW" value="480" min="50" max="1920">
+            </div>
+            <div>
+              <label style="font-size:0.75rem;color:var(--text-muted);font-family:'DM Mono',monospace;display:block;margin-bottom:5px;">HEIGHT (px)</label>
+              <input type="number" id="customH" value="360" min="50" max="1080">
+            </div>
+          </div>
+        </div>
+
+        <!-- QUALITY -->
+        <div class="control-group">
+          <div class="control-label">
+            <span>Color Quality</span>
+            <span class="control-value" id="qualityLabel">128 Colors</span>
+          </div>
+          <div class="select-wrap">
+            <select id="qualitySelect">
+              <option value="32">32 Colors — Minimal file size</option>
+              <option value="64">64 Colors — Small file size</option>
+              <option value="128" selected>128 Colors — Balanced</option>
+              <option value="200">200 Colors — High quality</option>
+              <option value="256">256 Colors — Best quality</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- LOOP -->
+        <div class="control-group">
+          <div class="control-label"><span>Loop Behavior</span></div>
+          <div class="select-wrap">
+            <select id="loopSelect">
+              <option value="0">Infinite Loop</option>
+              <option value="1">Play Once</option>
+              <option value="3">Loop 3× then stop</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- PROGRESS -->
+        <div class="progress-wrap" id="progressWrap">
+          <div class="progress-header">
+            <span id="progressLabel">Extracting frames…</span>
+            <span id="progressPct">0%</span>
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progressFill"></div>
+          </div>
+          <div class="progress-stage" id="progressStage"></div>
+        </div>
+
+        <button class="btn-primary" id="convertBtn" disabled>
+          Convert to GIF
+        </button>
+        <button class="btn-secondary" id="saveBtn">⬇ Save as GIF</button>
+        <button class="btn-reset" id="resetBtn">↺ Start Over</button>
+      </div>
+
+      <!-- GIF OUTPUT -->
+      <div class="gif-output" id="gifOutput">
+        <div class="panel">
+          <div class="panel-title"><span class="dot" style="background:var(--accent2);box-shadow:0 0 8px var(--accent2);"></span>GIF Preview</div>
+          <div class="gif-output-inner">
+            <img id="gifResult" src="" alt="Generated GIF">
+            <div class="gif-meta" id="gifMeta"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── SIDEBAR ── -->
+    <div class="sidebar">
+
+      <!-- STATS -->
+      <div class="panel">
+        <div class="panel-title"><span class="dot" style="background:var(--accent2);box-shadow:0 0 8px var(--accent2);animation-delay:0.5s;"></span>File Stats</div>
+        <div class="stats-grid">
+          <div class="stat-box">
+            <span class="stat-value" id="statDur">—</span>
+            <span class="stat-label">Duration</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-value" id="statFPS">—</span>
+            <span class="stat-label">FPS</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-value" id="statFrames">—</span>
+            <span class="stat-label">Frames</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-value" id="statSize">—</span>
+            <span class="stat-label">GIF Size</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SIDEBAR AD -->
+      <div class="ad-side">
+        <ins class="adsbygoogle"
+             style="display:block;min-height:250px;"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+             data-ad-slot="9876543210"
+             data-ad-format="rectangle"
+             data-full-width-responsive="false"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+
+      <!-- TIPS -->
+      <div class="panel">
+        <div class="panel-title"><span class="dot" style="background:#a78bfa;box-shadow:0 0 8px #a78bfa;animation-delay:1s;"></span>Pro Tips</div>
+        <ul class="tips-list">
+          <li>
+            <span class="tip-icon">⚡</span>
+            Shorter clips (under 10s) create smaller, sharper GIFs.
+          </li>
+          <li>
+            <span class="tip-icon">🎞</span>
+            10–15 FPS is ideal — higher FPS = larger file size.
+          </li>
+          <li>
+            <span class="tip-icon">🎨</span>
+            128 colors is usually the sweet spot for quality vs size.
+          </li>
+          <li>
+            <span class="tip-icon">📐</span>
+            480×360 works great for web embeds and social media.
+          </li>
+          <li>
+            <span class="tip-icon">🔒</span>
+            All processing is 100% local — your video never leaves your device.
+          </li>
+        </ul>
+      </div>
+
+      <!-- SECOND SIDEBAR AD -->
+      <div class="ad-side" style="min-height:200px;">
+        <ins class="adsbygoogle"
+             style="display:block;min-height:200px;"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+             data-ad-slot="1122334455"
+             data-ad-format="rectangle"
+             data-full-width-responsive="false"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- BOTTOM AD -->
+  <div class="ad-banner" style="margin-top:30px;">
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+         data-ad-slot="5566778899"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
+  <footer>
+    <p>GIFforge — 100% browser-based &nbsp;·&nbsp; No uploads &nbsp;·&nbsp; No servers &nbsp;·&nbsp; Your privacy is protected</p>
+    <p style="margin-top:6px;">Powered by Canvas API &amp; gif.js</p>
+  </footer>
+
+</div>
+
+<!-- GIF.js Library (CDN) -->
+<script src="https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.js"></script>
+
+<script>
+/* ══════════════════════════════════════════
+   GIFforge — Video to GIF Converter Engine
+   ══════════════════════════════════════════ */
+
+// ── State ──
+const state = {
+  videoFile: null,
+  videoDuration: 0,
+  videoW: 0, videoH: 0,
+  startTime: 0,
+  endTime: 10,
+  fps: 10,
+  outW: 480, outH: 360,
+  colors: 128,
+  loop: 0,
+  gifBlob: null,
+  gifUrl: null,
+  converting: false
+};
+
+// ── DOM refs ──
+const $ = id => document.getElementById(id);
+const uploadZone = $('uploadZone');
+const fileInput = $('fileInput');
+const videoWrap = $('videoWrap');
+const video = $('videoPreview');
+const startSlider = $('startSlider');
+const endSlider = $('endSlider');
+const fpsSlider = $('fpsSlider');
+const convertBtn = $('convertBtn');
+const saveBtn = $('saveBtn');
+const resetBtn = $('resetBtn');
+const progressWrap = $('progressWrap');
+const progressFill = $('progressFill');
+const progressPct = $('progressPct');
+const progressLabel = $('progressLabel');
+const progressStage = $('progressStage');
+const gifOutput = $('gifOutput');
+const gifResult = $('gifResult');
+const statusMsg = $('statusMsg');
+
+// ── Drag and drop ──
+uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('dragover'); });
+uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragover'));
+uploadZone.addEventListener('drop', e => {
+  e.preventDefault();
+  uploadZone.classList.remove('dragover');
+  const file = e.dataTransfer.files[0];
+  if (file && file.type.startsWith('video/')) loadVideo(file);
+  else showStatus('Please drop a valid video file.', 'error');
+});
+
+fileInput.addEventListener('change', e => {
+  if (e.target.files[0]) loadVideo(e.target.files[0]);
+});
+
+// ── Load video ──
+function loadVideo(file) {
+  state.videoFile = file;
+  const url = URL.createObjectURL(file);
+  video.src = url;
+
+  video.onloadedmetadata = () => {
+    state.videoDuration = video.duration;
+    state.startTime = 0;
+    state.endTime = Math.min(video.duration, 30); // cap at 30s by default
+
+    // Update sliders
+    startSlider.max = video.duration;
+    startSlider.value = 0;
+    endSlider.max = video.duration;
+    endSlider.value = state.endTime;
+    startSlider.step = endSlider.step = 0.05;
+
+    // Get resolution when playing
+    video.addEventListener('loadeddata', () => {
+      state.videoW = video.videoWidth;
+      state.videoH = video.videoHeight;
+      $('resBadge').textContent = `${state.videoW}×${state.videoH}`;
+    }, { once: true });
+
+    updateSliderLabels();
+    updateStats();
+
+    // Show video
+    uploadZone.style.display = 'none';
+    videoWrap.style.display = 'block';
+    $('durBadge').textContent = formatTime(video.duration);
+
+    convertBtn.disabled = false;
+    showStatus(`✓ Loaded: ${file.name}`, 'info');
+  };
+
+  video.onerror = () => showStatus('Could not load this video. Try a different format.', 'error');
+}
+
+// ── Sliders ──
+startSlider.addEventListener('input', () => {
+  state.startTime = parseFloat(startSlider.value);
+  if (state.startTime >= state.endTime - 0.2) {
+    state.startTime = state.endTime - 0.2;
+    startSlider.value = state.startTime;
+  }
+  updateSliderLabels();
+  video.currentTime = state.startTime;
+});
+
+endSlider.addEventListener('input', () => {
+  state.endTime = parseFloat(endSlider.value);
+  if (state.endTime <= state.startTime + 0.2) {
+    state.endTime = state.startTime + 0.2;
+    endSlider.value = state.endTime;
+  }
+  updateSliderLabels();
+  video.currentTime = state.endTime;
+});
+
+fpsSlider.addEventListener('input', () => {
+  state.fps = parseInt(fpsSlider.value);
+  $('fpsLabel').textContent = `${state.fps} FPS`;
+  const pct = ((state.fps - 5) / 25) * 100;
+  $('fpsFill').style.width = pct + '%';
+  updateStats();
+});
+
+function updateSliderLabels() {
+  const dur = state.videoDuration || 100;
+  $('startTimeLabel').textContent = state.startTime.toFixed(1) + 's';
+  $('endTimeLabel').textContent = state.endTime.toFixed(1) + 's';
+  $('durationLabel').textContent = (state.endTime - state.startTime).toFixed(1) + 's';
+  $('rangeFill').style.left = (state.startTime / dur * 100) + '%';
+  $('rangeFill').style.width = ((state.endTime - state.startTime) / dur * 100) + '%';
+  $('rangeFill2').style.width = (state.endTime / dur * 100) + '%';
+  updateStats();
+}
+
+// ── Quality select ──
+$('qualitySelect').addEventListener('change', function() {
+  state.colors = parseInt(this.value);
+  $('qualityLabel').textContent = `${this.value} Colors`;
+});
+
+$('loopSelect').addEventListener('change', function() {
+  state.loop = parseInt(this.value);
+});
+
+// ── Size presets ──
+document.getElementById('sizePresets').querySelectorAll('.preset-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const w = parseInt(btn.dataset.w), h = parseInt(btn.dataset.h);
+    if (w === -1) {
+      $('customSizeWrap').style.display = 'grid';
+      state.outW = parseInt($('customW').value);
+      state.outH = parseInt($('customH').value);
+    } else {
+      $('customSizeWrap').style.display = 'none';
+      if (w === 0) { state.outW = state.videoW || 480; state.outH = state.videoH || 360; }
+      else { state.outW = w; state.outH = h; }
+    }
+    updateStats();
+  });
+});
+
+$('customW').addEventListener('input', () => { state.outW = parseInt($('customW').value) || 480; });
+$('customH').addEventListener('input', () => { state.outH = parseInt($('customH').value) || 360; });
+
+// ── Stats ──
+function updateStats() {
+  const dur = (state.endTime - state.startTime).toFixed(1);
+  const frames = Math.round((state.endTime - state.startTime) * state.fps);
+  $('statDur').textContent = dur + 's';
+  $('statFPS').textContent = state.fps;
+  $('statFrames').textContent = frames;
+  // Rough size estimate: frames × (w×h × bits_per_pixel / 8) compressed ~40%
+  const estBytes = frames * state.outW * state.outH * 0.5 * 0.4;
+  $('statSize').textContent = estBytes > 1048576
+    ? (estBytes / 1048576).toFixed(1) + 'MB'
+    : Math.round(estBytes / 1024) + 'KB';
+}
+
+// ── Convert ──
+convertBtn.addEventListener('click', startConversion);
+
+async function startConversion() {
+  if (state.converting || !state.videoFile) return;
+
+  const clipDuration = state.endTime - state.startTime;
+  if (clipDuration <= 0) { showStatus('Invalid time range.', 'error'); return; }
+  if (clipDuration > 60) { showStatus('Max clip length is 60 seconds for browser conversion.', 'error'); return; }
+
+  state.converting = true;
+  convertBtn.disabled = true;
+  saveBtn.style.display = 'none';
+  resetBtn.style.display = 'none';
+  gifOutput.style.display = 'none';
+  progressWrap.style.display = 'block';
+  clearStatus();
+
+  try {
+    const frames = await extractFrames();
+    await encodeGIF(frames);
+  } catch(err) {
+    console.error(err);
+    showStatus('Conversion failed: ' + err.message, 'error');
+    resetConvertBtn();
+  }
+}
+
+// ── Extract Frames ──
+async function extractFrames() {
+  const canvas = document.createElement('canvas');
+  canvas.width = state.outW;
+  canvas.height = state.outH;
+  const ctx = canvas.getContext('2d');
+
+  const totalFrames = Math.round((state.endTime - state.startTime) * state.fps);
+  const frameInterval = 1 / state.fps;
+  const frames = [];
+
+  setProgress(0, 'Stage 1/2 — Extracting frames…', 'Seeking to start…');
+
+  for (let i = 0; i < totalFrames; i++) {
+    const t = state.startTime + i * frameInterval;
+    await seekVideo(t);
+    ctx.drawImage(video, 0, 0, state.outW, state.outH);
+    frames.push(ctx.getImageData(0, 0, state.outW, state.outH));
+
+    const pct = Math.round((i + 1) / totalFrames * 50);
+    setProgress(pct, `Stage 1/2 — Extracting frames…`, `Frame ${i + 1} / ${totalFrames}`);
+    await sleep(0); // Yield to browser
+  }
+
+  return frames;
+}
+
+function seekVideo(time) {
+  return new Promise(resolve => {
+    video.currentTime = time;
+    const handler = () => { video.removeEventListener('seeked', handler); resolve(); };
+    video.addEventListener('seeked', handler);
+  });
+}
+
+// ── Encode GIF ──
+function encodeGIF(frames) {
+  return new Promise((resolve, reject) => {
+    if (typeof GIF === 'undefined') {
+      reject(new Error('GIF.js library not loaded. Check your internet connection.'));
+      return;
+    }
+
+    setProgress(50, 'Stage 2/2 — Encoding GIF…', 'Initializing encoder…');
+
+    const gif = new GIF({
+      workers: 2,
+      quality: Math.round(30 - (state.colors / 256) * 25),
+      width: state.outW,
+      height: state.outH,
+      workerScript: 'https://cdn.jsdelivr.net/npm/gif.js@0.2.0/dist/gif.worker.js',
+      repeat: state.loop
+    });
+
+    const delay = Math.round(1000 / state.fps);
+    frames.forEach(frame => gif.addFrame(frame, { delay }));
+
+    gif.on('progress', p => {
+      const pct = 50 + Math.round(p * 50);
+      setProgress(pct, 'Stage 2/2 — Encoding GIF…', `Encoding: ${Math.round(p * 100)}% complete`);
+    });
+
+    gif.on('finished', blob => {
+      state.gifBlob = blob;
+      state.gifUrl = URL.createObjectURL(blob);
+      displayResult(blob);
+      resolve();
+    });
+
+    gif.on('error', err => reject(new Error(err)));
+    gif.render();
+  });
+}
+
+// ── Display Result ──
+function displayResult(blob) {
+  gifResult.src = state.gifUrl;
+  gifOutput.style.display = 'block';
+
+  const sizeStr = blob.size > 1048576
+    ? (blob.size / 1048576).toFixed(2) + ' MB'
+    : Math.round(blob.size / 1024) + ' KB';
+
+  $('statSize').textContent = sizeStr;
+
+  $('gifMeta').innerHTML = `
+    <div class="gif-meta-item">Size: <span>${sizeStr}</span></div>
+    <div class="gif-meta-item">Dims: <span>${state.outW}×${state.outH}</span></div>
+    <div class="gif-meta-item">FPS: <span>${state.fps}</span></div>
+    <div class="gif-meta-item">Duration: <span>${(state.endTime - state.startTime).toFixed(1)}s</span></div>
+    <div class="gif-meta-item">Colors: <span>${state.colors}</span></div>
+  `;
+
+  setProgress(100, 'Done! Your GIF is ready.', '');
+  setTimeout(() => { progressWrap.style.display = 'none'; }, 1500);
+
+  saveBtn.style.display = 'block';
+  resetBtn.style.display = 'block';
+  state.converting = false;
+  convertBtn.disabled = false;
+  convertBtn.innerHTML = '↺ Re-Convert';
+
+  showStatus('✓ GIF created successfully!', 'info');
+
+  // Scroll to output
+  gifOutput.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ── Save GIF ──
+saveBtn.addEventListener('click', () => {
+  if (!state.gifUrl) return;
+  const a = document.createElement('a');
+  a.href = state.gifUrl;
+  const name = (state.videoFile?.name || 'video').replace(/\.[^.]+$/, '');
+  a.download = `${name}_gifforge.gif`;
+  a.click();
+});
+
+// ── Reset ──
+resetBtn.addEventListener('click', () => {
+  if (!confirm('Start over? Your current GIF will be lost.')) return;
+  // Reset state
+  state.videoFile = null;
+  state.gifBlob = null;
+  if (state.gifUrl) URL.revokeObjectURL(state.gifUrl);
+  state.gifUrl = null;
+  state.converting = false;
+
+  // Reset UI
+  video.src = '';
+  fileInput.value = '';
+  videoWrap.style.display = 'none';
+  uploadZone.style.display = 'block';
+  gifOutput.style.display = 'none';
+  progressWrap.style.display = 'none';
+  saveBtn.style.display = 'none';
+  resetBtn.style.display = 'none';
+  convertBtn.disabled = true;
+  convertBtn.innerHTML = 'Convert to GIF';
+  clearStatus();
+
+  // Reset sliders
+  startSlider.value = 0; endSlider.value = 100;
+  fpsSlider.value = 10;
+  $('fpsLabel').textContent = '10 FPS';
+  $('fpsFill').style.width = '33%';
+  $('startTimeLabel').textContent = '0.0s';
+  $('endTimeLabel').textContent = '10.0s';
+  $('durationLabel').textContent = '10.0s';
+  $('rangeFill').style.left = '0%';
+  $('rangeFill').style.width = '100%';
+  $('rangeFill2').style.width = '100%';
+  ['statDur','statFPS','statFrames','statSize'].forEach(id => $(id).textContent = '—');
+});
+
+// ── Utilities ──
+function setProgress(pct, label, stage) {
+  progressFill.style.width = pct + '%';
+  progressPct.textContent = pct + '%';
+  progressLabel.textContent = label;
+  progressStage.textContent = stage;
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+function formatTime(s) {
+  const m = Math.floor(s / 60);
+  const sec = Math.floor(s % 60);
+  return `${m}:${sec.toString().padStart(2,'0')}`;
+}
+
+function showStatus(msg, type) {
+  statusMsg.textContent = msg;
+  statusMsg.className = 'status-msg ' + type;
+}
+
+function clearStatus() {
+  statusMsg.className = 'status-msg';
+  statusMsg.textContent = '';
+}
+
+function resetConvertBtn() {
+  state.converting = false;
+  convertBtn.disabled = false;
+  progressWrap.style.display = 'none';
+}
+</script>
+</body>
+</html>
